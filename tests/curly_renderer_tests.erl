@@ -10,3 +10,9 @@ rendering_test() ->
     end,
     {ok, Output} = curly_renderer:render(Template, Presenter),
     ?assertEqual("The clown bozo", Output).
+
+comment_test() ->
+    Template = "Hello {{! NONONO }}there!",
+    Presenter = fun(_) -> "boom" end,
+    {ok, Output} = curly_renderer:render(Template, Presenter),
+    ?assertEqual("Hello there!", Output).
