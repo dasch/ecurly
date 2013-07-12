@@ -3,5 +3,8 @@
 
 rendering_test() ->
     Template = "The clown {{clown}}",
-    {ok, Output} = curly_renderer:render(Template, circus),
+    Presenter = fun(Reference) ->
+        erlang:apply(circus, list_to_atom(Reference), [])
+    end,
+    {ok, Output} = curly_renderer:render(Template, Presenter),
     ?assertEqual("The clown bozo", Output).
