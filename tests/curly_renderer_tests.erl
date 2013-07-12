@@ -4,7 +4,9 @@
 rendering_test() ->
     Template = "The clown {{clown}}",
     Presenter = fun(Reference) ->
-        erlang:apply(circus, list_to_atom(Reference), [])
+        case Reference of
+            "clown" -> "bozo"
+        end
     end,
     {ok, Output} = curly_renderer:render(Template, Presenter),
     ?assertEqual("The clown bozo", Output).
