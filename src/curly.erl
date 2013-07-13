@@ -1,7 +1,13 @@
 -module(curly).
--export([render/2]).
+-export([compile/1, render/2]).
 
 render(Template, Presenter) ->
+    CompiledTemplate = compile(Template),
+    CompiledTemplate(Presenter).
+
+compile(Template) ->
     {ok, Tokens} = curly_scanner:scan(Template),
     ParseTree = curly_parser:parse(Tokens),
-    curly_renderer:render(ParseTree, Presenter).
+    fun(Presenter) ->
+        curly_renderer:render(ParseTree, Presenter)
+    end.
