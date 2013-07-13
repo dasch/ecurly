@@ -2,17 +2,13 @@
 -include_lib("eunit/include/eunit.hrl").
 
 rendering_test() ->
-    Template = "The clown {{clown}}",
-    Presenter = fun(Reference) ->
-        case Reference of
-            "clown" -> "bozo"
-        end
-    end,
-    {ok, Output} = curly_renderer:render(Template, Presenter),
-    ?assertEqual("The clown bozo", Output).
+    Tokens = [{text, "foo "}, {reference, "bar"}],
+    Presenter = fun(Reference) -> string:to_upper(Reference) end,
+    {ok, Output} = curly_renderer:render(Tokens, Presenter),
+    ?assertEqual("foo BAR", Output).
 
 comment_test() ->
-    Template = "Hello {{! NONONO }}there!",
-    Presenter = fun(_) -> "boom" end,
-    {ok, Output} = curly_renderer:render(Template, Presenter),
-    ?assertEqual("Hello there!", Output).
+    Tokens = [{text, "foo "}, {comment, "boom"}, {text, "bar"}],
+    Presenter = fun(Reference) -> string:to_upper(Reference) end,
+    {ok, Output} = curly_renderer:render(Tokens, Presenter),
+    ?assertEqual("foo bar", Output).
