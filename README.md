@@ -9,7 +9,7 @@ Template = "Hello {{name}}!",
 
 % You can render the template using `curly:render_with_dict` if you want to supply the values
 % of the references with a dict().
-Dict = dict:from_list([{name, "World}]),
+Dict = dict:from_list([{name, "World"}]),
 {ok, "Hello World!"} = curly:render_with_dict(Template, Dict),
 
 % You can also use a module to supply the values. It needs to export a function with the names
