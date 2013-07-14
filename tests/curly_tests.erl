@@ -21,3 +21,10 @@ rendering_with_module_test() ->
     Template = "Hello {{foo}}!",
     {ok, Output} = curly:render_with_module(Template, fixture),
     ?assertEqual("Hello World!", Output).
+
+rendering_with_dict_test() ->
+    Template = "Hello {{foo}}!",
+    Dict = dict:from_list([{foo, "World"}]),
+    {ok, Output} = curly:render_with_dict(Template, Dict),
+    ?assertEqual("Hello World!", Output).
+
