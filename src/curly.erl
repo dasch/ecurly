@@ -1,13 +1,15 @@
 -module(curly).
--export([compile/1, render/2]).
+-export([compile/1, render/2, render_with_module/2]).
 
 render(Template, Presenter) ->
     CompiledTemplate = compile(Template),
     CompiledTemplate(Presenter).
 
-compile(Template) ->
-    {ok, Tokens} = curly_scanner:scan(Template),
-    ParseTree = curly_parser:parse(Tokens),
-    fun(Presenter) ->
-        curly_renderer:render(ParseTree, Presenter)
-    end.
+render_with_module(Template, Module) ->
+    Presenter = fun(Reference) ->
+        Function = list_to_atom(Reference),
+        erlang:apply(Module, Function, [])
+    end,
+    render(Template, Presenter).
+
+compile(Template) -> curly_compiler:compile(Template).
